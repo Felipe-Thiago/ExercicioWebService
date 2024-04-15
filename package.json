@@ -1,0 +1,14 @@
+{
+  "name": "exerciciowebservice",
+  "version": "1.0.0",
+  "description": "Exercicio realizado na aula 09/04/2024",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Thiago",
+  "license": "MIT",
+  "devDependencies": {
+    "express": "^4.19.2"
+  }
+}
