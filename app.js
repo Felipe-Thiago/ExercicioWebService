@@ -57,29 +57,32 @@ app.put('/', (req, res)=>{
     const index = alunos.findIndex(x => x.ra == req.body.ra) //percorre a lista de alunos até o ra informado
     
     if(index !== -1){
-        if(req.body.curso != null){ //alterar curso
-            //alunos[index].cursos ? (verificar curso dado e alterar curso) : (dizer pra inserir um curso primeiro)
-            if(alunos[index].cursos != null){
-                const index2 = alunos[index].cursos.findIndex(y => y.curso == req.body.curso)
-                alunos[index].cursos[index2] = req.body.curso
-            //o curso cadastrado que corresponder ao curso informado será alterado
-            } else{
-                res.send("Atribua um curso ao aluno através do POST primeiro!")
+        if(req.body.cursoAntigo !== undefined && req.body.cursoNovo !== undefined){
+            if(alunos[index].cursos !== undefined){
+                const iCursoAntigo = alunos[index].cursos.findIndex(y => y.curso == req.body.cursoAntigo)
+            
+                if(iCursoAntigo !== -1){
+                    alunox[index].cursos[iCursoAntigo].curso = req.body.cursoNovo
+                    res.send(`${req.body.cursoAntigo} substituído por ${req.body.cursoNovo}`)
+                } else{
+                    res.send(`O aluno não possui o curso informado`)
+                }
             }
         } else{ //alterar outras infos sem alterar um curso existente
             if(req.body.nome || req.body.turma){
-                alunos[index] = {ra: req.body.ra, nome: req.body.nome, turma: req.body.turma}
-                
+                const aluno = {ra: req.body.ra}
+                if(req.body.nome){
+                    aluno.nome = req.body.nome
+                }
+                if(req.body.turma){
+                    aluno.turma = req.body.turma
+                }
+                alunos[index] = aluno
+                res.send(alunos[index])
+            } else{
+                res.send(`Informe um nome, turma ou curso para ser atualizado`)
             }
         }
-        /*if(req.body.nome != null || req.body.turma != null){ //se quiser alterar o nome ou turma a partir do ra
-         
-            alunos[index] = {ra: req.body.ra, nome: req.body.nome, turma: req.body.turma}
-            res.send(alunos[index])
-        } else if (req.body.curso != null){ //se quiser alterar o(s) curso(s)
-            const index2 = alunos[index].cursos.findindex(y => y.curso == req.body.curso)
-            
-        } */
     } else{
         res.send(`RA inexistente, alunos cadastrados: \n` + JSON.stringify(alunos))
     }
