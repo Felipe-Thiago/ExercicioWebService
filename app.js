@@ -59,11 +59,9 @@ app.put('/', (req, res)=>{
 
     if(index !== -1){ //ra existe
         if(req.body.curso){ //curso foi dado
-            
             const cursoAntigo = aluno.curso
             aluno.cursos = req.body.curso
             res.send(`Curso ${cursoAntigo} substituído por ${aluno.curso}`)
-            
         
         }
         if(req.body.nome){
@@ -85,8 +83,13 @@ app.put('/', (req, res)=>{
 
 app.delete('/', (req, res)=>{
     const index = alunos.findIndex(x => x.ra == req.body.ra)
-    
-    alunos.splice(index, 1)
+    if (index !== -1){
+        if(req.body.curso){
+            alunos[index].cursos.splice(1)
+            return
+        }
+        alunos.splice(index, 1)
+    } 
     
     res.send(alunos)
 })
