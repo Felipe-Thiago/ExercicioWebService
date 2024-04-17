@@ -54,38 +54,32 @@ app.post('/', (req, res)=>{
 })
 
 app.put('/', (req, res)=>{
-    const index = alunos.findIndex(x => x.ra == req.body.ra) //percorre a lista de alunos até o ra informado
-    
-    if(index !== -1){
-        if(req.body.cursoAntigo !== undefined && req.body.cursoNovo !== undefined){
-            if(alunos[index].cursos !== undefined){
-                const iCursoAntigo = alunos[index].cursos.findIndex(y => y.curso == req.body.cursoAntigo)
+    const index = alunos.findIndex(x => x.ra == req.body.ra) //acha o ra informado
+    const aluno = alunos[index]
+
+    if(index !== -1){ //ra existe
+        if(req.body.curso){ //curso foi dado
             
-                if(iCursoAntigo !== -1){
-                    alunox[index].cursos[iCursoAntigo].curso = req.body.cursoNovo
-                    res.send(`${req.body.cursoAntigo} substituído por ${req.body.cursoNovo}`)
-                } else{
-                    res.send(`O aluno não possui o curso informado`)
-                }
-            }
-        } else{ //alterar outras infos sem alterar um curso existente
-            if(req.body.nome || req.body.turma){
-                const aluno = {ra: req.body.ra}
-                if(req.body.nome){
-                    aluno.nome = req.body.nome
-                }
-                if(req.body.turma){
-                    aluno.turma = req.body.turma
-                }
-                alunos[index] = aluno
-                res.send(alunos[index])
-            } else{
-                res.send(`Informe um nome, turma ou curso para ser atualizado`)
-            }
+            const cursoAntigo = aluno.curso
+            aluno.cursos = req.body.curso
+            res.send(`Curso ${cursoAntigo} substituído por ${aluno.curso}`)
+            
+        
         }
+        if(req.body.nome){
+            aluno.nome = req.body.nome
+        }
+        if(req.body.turma){
+            aluno.turma = req.body.turma
+        }
+               
+        res.send(aluno)
     } else{
-        res.send(`RA inexistente, alunos cadastrados: \n` + JSON.stringify(alunos))
+        res.send(`Informe um nome, turma ou curso para ser atualizado`)
     }
+    // } else{
+    //     res.send(`RA inexistente, alunos cadastrados: \n` + JSON.stringify(alunos))
+    // }
     
 })
 
